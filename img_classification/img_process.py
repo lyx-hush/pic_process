@@ -60,25 +60,6 @@ class ImageProcessor:
             print('请输入正确的序号或模型名称！')
             return 1, None
 
-    def image_select(self):
-        print('下面是图像列表:')
-        images = os.listdir(image_path)
-        for index, image in enumerate(images):
-            print(f'{index}:{image}')
-        input_data = input("请输入图片或文件夹的序号:")
-        if re.compile(r'^-?\d+$').match(input_data):
-            if int(input_data) <= len(images) - 1:
-                print(f"你输入的图片或文件夹是:{images[int(input_data)]}")
-                return 0, os.path.join(image_path + '/', images[int(input_data)])
-            else:
-                print("序号错误请重新输入:")
-                return 1, None
-        elif input_data == 'quit' or input_data == '退出':
-            return 0, None
-        else:
-            print('请重新输入序号！')
-            return 1, None
-
     def run(self):
         model_label = 1
         img_label = 1
@@ -87,14 +68,15 @@ class ImageProcessor:
         while model_label == 1:
             model_label, model = self.model_select()
         while img_label == 1:
-            img_label, image = self.image_select()
+            img_label, image = self.img_reader.image_select(image_path=image_path)
         image = self.img_reader.read(image_path=image)
         vit_inference(image, model)
+
 
 if __name__ == '__main__':
     ceshi = ImageProcessor()
     ceshi.run()
-#     # pass
+    #     # pass
     label = get_labels(task='common')
 #     print(image)
 #

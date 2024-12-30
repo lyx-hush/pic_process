@@ -37,7 +37,24 @@ def pic_to_np(img):
 class PictureRead:
     def __init__(self):
         pass
-
+    def image_select(self,image_path):
+        print('下面是图像列表:')
+        images = os.listdir(image_path)
+        for index, image in enumerate(images):
+            print(f'{index}:{image}')
+        input_data = input("请输入图片或文件夹的序号:")
+        if re.compile(r'^-?\d+$').match(input_data):
+            if int(input_data) <= len(images) - 1:
+                print(f"你输入的图片或文件夹是:{images[int(input_data)]}")
+                return 0, os.path.join(image_path + '/', images[int(input_data)])
+            else:
+                print("序号错误请重新输入:")
+                return 1, None
+        elif input_data == 'quit' or input_data == '退出':
+            return 0, None
+        else:
+            print('请重新输入序号！')
+            return 1, None
     def read(self, thread=False, image_path=None):
         images = []
         if thread:
