@@ -35,26 +35,35 @@ def pic_to_np(img):
 
 
 class PictureRead:
-    def __init__(self, image_path):
-        self.image_path = image_path
+    def __init__(self):
+        pass
 
-    def read(self, thread=False):
+    def read(self, thread=False, image_path=None):
         images = []
         if thread:
             pass
-        else:
+        elif os.path.isfile(image_path):
+            print(f"对图像{image_path.split('/')[-1]}进行处理！")
             start_time = time.time()
-            directory = os.listdir(self.image_path)
+            image = Image.open(image_path)
+            end_time = time.time()
+            print(end_time - start_time)
+            return image
+        elif os.path.isdir(image_path):
+            start_time = time.time()
+            directory = os.listdir(image_path)
             for filename in tqdm(directory):
-                image = Image.open(os.path.join(self.image_path, filename))
-                images.append(image)
+                if filename.endswith(".jpg") or filename.endswith("png"):
+                    image = Image.open(os.path.join(image_path, filename))
+                    images.append(image)
+                else:
+                    continue
             end_time = time.time()
             print(end_time - start_time)
             return images
 
-
-if __name__ == '__main__':
-    pic_read = PictureRead(r'E:\mydjango\Picture_Processor\image')
-    images = pic_read.read()
-    tensor_list = pic_to_tensor(images)
-    print(tensor_list)
+# if __name__ == '__main__':
+#     pic_read = PictureRead(r'E:\mydjango\Picture_Processor\image')
+#     images = pic_read.read()
+#     tensor_list = pic_to_tensor(images)
+#     print(tensor_list)
